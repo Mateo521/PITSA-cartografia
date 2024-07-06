@@ -146,4 +146,53 @@ function mostrar_grafico_torta() {
 }
 add_shortcode('grafico_torta', 'mostrar_grafico_torta');
 
+
+
+function mostrar_grafico_polar_area() {
+  $categories = get_categories();
+  $data = [];
+  foreach ($categories as $category) {
+      $data[] = [
+          'label' => $category->name,
+          'count' => $category->count,
+      ];
+  }
+
+  ob_start(); ?>
+
+  <canvas id="graficoPolarArea"></canvas>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('graficoPolarArea').getContext('2d');
+      var data = {
+          labels: <?php echo json_encode(wp_list_pluck($data, 'label')); ?>,
+          datasets: [{
+              data: <?php echo json_encode(wp_list_pluck($data, 'count')); ?>,
+              backgroundColor: [
+                  '#FF6384',
+                  '#36A2EB',
+                  '#FFCE56',
+                  '#4BC0C0',
+                  '#9966FF',
+                  '#FF9F40',
+                  '#C9CBCF',
+                  '#9AD0F5',
+                  '#E3A7A1',
+                  '#FFEA61'
+              ]
+          }]
+      };
+      new Chart(ctx, {
+          type: 'polarArea',
+          data: data
+      });
+  });
+  </script>
+
+  <?php return ob_get_clean();
+}
+add_shortcode('grafico_polar_area', 'mostrar_grafico_polar_area');
+
+
+
 ?>
