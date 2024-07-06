@@ -12,7 +12,7 @@
                     $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
                     $args = array(
                         'post_type' => 'post', // Tipo de post que quieres mostrar
-                        'posts_per_page' => 6, // Número de posts por página
+                        'posts_per_page' => 8, // Número de posts por página
                         'paged' => $paged
                     );
 
@@ -21,9 +21,11 @@
                     if ($the_query->have_posts()):
                         while ($the_query->have_posts()):
                             $the_query->the_post();
+
+                            $category = get_the_category();
                             ?>
                             <div
-                                class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                class="<?php echo sanitize_title($category[0]->name) ?> max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <a href="<?php the_permalink(); ?>">
                                     <?php
                                     if (has_post_thumbnail()) {
@@ -34,7 +36,6 @@
                                 <div class="p-5">
                                     <h2>
                                         <?php
-                                        $category = get_the_category();
                                         if (!empty($category)) {
                                             echo esc_html($category[0]->name);
                                         }
@@ -82,31 +83,8 @@
     </section>
 </main>
 
-<style>
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        text-align: center;
-    }
 
-    .pagination .page-numbers {
-        display: inline-block;
-        margin-right: 5px;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        text-decoration: none;
-        color: #333;
-    }
 
-    .pagination .page-numbers:hover,
-    .pagination .current {
-        background-color: #284f3b;
-        color: #fff;
-        border-color: #284f3b;
-    }
-</style>
 
 <?php
 

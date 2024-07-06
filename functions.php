@@ -21,6 +21,15 @@ add_action( 'after_setup_theme', 'mi_tema_setup' );
 
 
 
+function custom_search_filter($query) {
+  if ($query->is_search && !is_admin()) {
+      if (isset($_GET['cat']) && !empty($_GET['cat'])) {
+          $query->set('cat', sanitize_text_field($_GET['cat']));
+      }
+  }
+  return $query;
+}
+add_filter('pre_get_posts', 'custom_search_filter');
 
 
 function my_theme_sidebars() {
@@ -63,51 +72,78 @@ function custom_pagination() {
 */
 
 
-function custom_pagination($numpages = '', $pagerange = '', $paged='') {
+function custom_pagination() {
+  global $wp_query;
+  $big = 999999999; // Necesario para la paginación de WordPress
 
-    if (empty($pagerange)) {
-      $pagerange = 2;
-    }
-    global $paged;
-    if (empty($paged)) {
-      $paged = 1;
-    }
-    if ($numpages == '') {
-      global $wp_query;
-      $numpages = $wp_query->max_num_pages;
-      if(!$numpages) {
-          $numpages = 1;
-      }
-    }
-  
-    $pagination_args = array(
-      'base'            => get_pagenum_link(1) . '%_%',
-      'format'          => 'page/%#%',
-      'total'           => $numpages,
-      'current'         => $paged,
-      'show_all'        => False,
-      'end_size'        => 1,
-      'mid_size'        => $pagerange,
-      'prev_next'       => True,
-      'prev_text'       => __('«'),
-      'next_text'       => __('»'),
-      'type'            => 'array',
-      'add_args'        => false,
-      'add_fragment'    => ''
-    );
-  
-   $paginate_links = paginate_links($pagination_args);
-  
-   if (is_array($paginate_links)) {
-     echo "<div class='cpagination'>";
-     echo "<span class='page-numbers page-num'>Página " . $paged . " de " . $numpages . "</span> ";
-     echo '<ul class="pagination">';
-     foreach ( $paginate_links as $page ) {
-       echo "<li>$page</li>";
-     }
-     echo '</ul>';
-     echo "</div>";
-   }
+  // Capturar los parámetros de búsqueda y categoría
+  $query_params = [];
+  if (!empty(get_search_query())) {
+      $query_params['s'] = get_search_query();
+  }
+  if (!empty(get_query_var('cat'))) {
+      $query_params['cat'] = get_query_var('cat');
+  }
+
+  // Generar enlaces de paginación con parámetros adicionales
+  echo paginate_links(array(
+      'base'    => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+      'format'  => '?paged=%#%',
+      'current' => max(1, get_query_var('paged')),
+      'total'   => $wp_query->max_num_pages,
+      'add_args' => $query_params,
+      'prev_text' => __('« Anterior'),
+      'next_text' => __('Siguiente »'),
+  ));
 }
+
+
+function cargar_chartjs() {
+  wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), null, true);
+}
+add_action('wp_enqueue_scripts', 'cargar_chartjs');
+
+
+
+function mostrar_grafico_torta() {
+  $categories = get_categories();
+  $data = [];
+  foreach ($categories as $category) {
+      $data[] = [
+          'label' => $category->name,
+          'count' => $category->count,
+      ];
+  }
+
+  ob_start(); ?>
+
+  <canvas id="graficoTorta"></canvas>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('graficoTorta').getContext('2d');
+      var data = {
+          labels: <?php echo json_encode(wp_list_pluck($data, 'label')); ?>,
+          datasets: [{
+              data: <?php echo json_encode(wp_list_pluck($data, 'count')); ?>,
+              backgroundColor: [
+                  '#FF6384',
+                  '#36A2EB',
+                  '#FFCE56',
+                  '#4BC0C0',
+                  '#9966FF',
+                  '#FF9F40'
+              ]
+          }]
+      };
+      new Chart(ctx, {
+          type: 'pie',
+          data: data
+      });
+  });
+  </script>
+
+  <?php return ob_get_clean();
+}
+add_shortcode('grafico_torta', 'mostrar_grafico_torta');
 
 ?>
