@@ -4,7 +4,7 @@ Theme URI: URL
 Description: -
 Author: Villalva Mateo
 Author URI: -
-Version: 1.51
+Version: 1.56
 License: GPLv2
 License URI: - 
 Text Domain: -
@@ -83,3 +83,23 @@ background-size: cover;
     width: 100%;
     padding: 10px;
 }
+
+
+
+
+/* Para cambiar el color del trazo */
+path {
+    stroke: rgb(17, 95, 34) !important; /* Rojo */
+    stroke-opacity: 1 !important;
+    stroke-width: 3 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+  }
+  
+  /* Para cambiar el color de relleno */
+  path {
+    fill: rgba(174, 252, 181, 0.11) !important; /* Azul */
+    fill-opacity: 0.2 !important;
+    fill-rule: evenodd !important;
+  }
+  

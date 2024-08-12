@@ -26,8 +26,8 @@
 
   <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700" style="border-bottom:3px solid #284f3b;">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/logo.png" class="h-24" alt="Flowbite Logo" />
+      <a href="<?php echo site_url('/casos'); ?>" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/logo.png" class="h-24" alt="PITSA Logo" />
       </a>
 
       <button data-collapse-toggle="navbar-dropdown" type="button"
@@ -60,29 +60,19 @@
               class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
               <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
                 <li>
-                  <a href="#"
+                  <a href="https://pitsa.unsl.edu.ar" 
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Volver a
                     pitsa.unsl.edu.ar</a>
                 </li>
                 <li>
-                  <a href="#"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Formulario
-                    para agregar marcador</a>
-                </li>
-                <li>
-                  <a href="#"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Otro...</a>
+                  <a href="<?php echo site_url('/formulario'); ?>"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Agregar caso</a>
                 </li>
               </ul>
-              <div class="py-1">
-                <a href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-                  out</a>
-              </div>
             </div>
           </li>
           <li>
-            <a href="<?php echo esc_url(home_url('/mapa')); ?>"
+            <a href="<?php echo esc_url(home_url('/')); ?>"
               class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-emerald-700 md:p-0 dark:text-white md:dark:hover:text-emerald-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Mapa</a>
           </li>
           <li>
