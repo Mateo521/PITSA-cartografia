@@ -435,21 +435,34 @@ function mostrar_formulario_admin()
         foreach ($resultados as $fila) {
             echo '<tr>';
             echo '<td>' . esc_html($fila['id']) . '</td>';
-            echo '<td>' . esc_html($fila['contacto']) . '</td>';
-            echo '<td>' . esc_html($fila['afectado']) . '</td>';
+            echo '<td title="' . esc_html($fila['contacto']) . '">' . limitar_texto($fila['contacto'], 20) . '</td>';
+            echo '<td title="' . esc_html($fila['afectado']) . '">' . limitar_texto($fila['afectado'], 20) . '</td>';
             echo '<td>' . esc_html($fila['fecha_de_comienzo']) . '</td>';
             echo '<td>' . esc_html($fila['fecha_puntual']) . '</td>';
             echo '<td>' . esc_html($fila['personas_afectadas']) . '</td>';
             echo '<td>' . esc_html($fila['latitude']) . '</td>';
             echo '<td>' . esc_html($fila['longitude']) . '</td>';
-            echo '<td>' . esc_html($fila['linkgoogle']) . '</td>';
+
+            echo '<td>';
+
+            $linkgoogle = esc_html($fila['linkgoogle']);
+            
+            if (!empty($linkgoogle)) {
+                echo '<a target="_blank" href="' . $linkgoogle . '">abrir</a>';
+            } else {
+                echo 'N/A'; 
+            }
+            
+            echo '</td>';
+
+
             echo '<td>' . esc_html($fila['s_afectada']) . '</td>';
             echo '<td>' . esc_html($fila['hecho']) . '</td>';
             echo '<td>' . esc_html($fila['sucede']) . '</td>';
             echo '<td>' . esc_html($fila['repite']) . '</td>';
             echo '<td>' . esc_html($fila['frecuencia']) . '</td>';
             echo '<td>' . esc_html($fila['denuncias']) . '</td>';
-            echo '<td>' . esc_html($fila['denuncia_informacion']) . '</td>';
+            echo '<td title="' . esc_html($fila['denuncia_informacion']) . '">' . limitar_texto($fila['denuncia_informacion'], 20) . '</td>';
             echo '<td>';
             if ($fila['evidencia']) {
                 $evidencias = unserialize($fila['evidencia']);
@@ -470,6 +483,20 @@ function mostrar_formulario_admin()
     echo '</div>';
 }
 
+function limitar_texto($texto, $limite) {
+    if (strlen($texto) > $limite) {
+        return substr($texto, 0, $limite) . '...';
+    } else {
+        return $texto;
+    }
+}
+
+
+// Agregar estilos personalizados en el área de administración
+function agregar_estilos_personalizados_admin() {
+    wp_enqueue_style('custom-admin-styles', get_template_directory_uri() . '/admin-styles.css');
+}
+add_action('admin_enqueue_scripts', 'agregar_estilos_personalizados_admin');
 
 
 function set_coords_from_url() {
